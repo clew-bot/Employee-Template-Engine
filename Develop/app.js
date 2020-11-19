@@ -11,7 +11,7 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 const render = require("./lib/htmlRenderer");
 
 const teamMembers = [];
-
+// Using inquirer to ask and answer questions for the given employee stats // 
 function generateTheTeam() {
     return inquirer.prompt([
         { 
@@ -43,6 +43,8 @@ function generateTheTeam() {
         }
     })
 
+
+// Main functions to prompt user with corresponding questions and render to HTML. 
 function getManager() {
     return inquirer.prompt([{
         type: "input",
@@ -64,11 +66,15 @@ function getManager() {
     }   
 ]).then(managerChoices => {
     console.log(managerChoices);
+    //Important: we will create a new manager class with the properties for first-name, email, ID, etc. //
     const manager = new Manager(managerChoices.managerFirstName, managerChoices.managerEmail, managerChoices.managerID, managerChoices.managerSuite)
+    // Once created push up the newly created object into Team Members empty variable. //
     teamMembers.push(manager)
-    return generateMain();
+    // render the person into the Team, the function will grab the teamMembers variable and render it //
+    return generateTheTeam();
 })
 }
+// Repeat the steps above for engineer and intern. Control C and control V! // 
 function getEngineer() {
     return inquirer.prompt([{
         type: "input",
@@ -92,7 +98,7 @@ function getEngineer() {
     console.log(engineerChoices);
     const engineer = new Engineer(engineerChoices.engineerFirstName, engineerChoices.engineerEmail, engineerChoices.engineerID, engineerChoices.engineerGit)
     teamMembers.push(engineer)
-    return generateMain();
+    return generateTheTeam();
 })
 }
 function getIntern() {
@@ -118,12 +124,14 @@ function getIntern() {
     console.log(internChoices);
     const intern = new Intern(internChoices.internFirstName, internChoices.internEmail, internChoices.internID, internChoices.internGit)
     teamMembers.push(intern)
-    return generateMain();
+    return generateTheTeam();
 })
 }
 }
 generateTheTeam().then(() => {
+    // render is already a given function, we are passing in the teamMembers variable which holds the employee data // 
     let html = render(teamMembers);
+    // node fs module to write the file into the team.html //
     fs.writeFile("./output/team.html", html, "utf8", ()=> {
         console.log(`Completed.`)
     });
