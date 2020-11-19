@@ -10,7 +10,124 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
+const teamMembers = [];
 
+function generateTheTeam() {
+    return inquirer.prompt([
+        { 
+    type: "list",
+    name: "choiceOptions",
+    message: "What type of team member are you?",
+    choices: [
+        "Manager",
+        "Engineer",
+        "Intern",
+        "None left"
+    ]}
+    ]).then(userSelection => {
+        switch (userSelection.choiceOptions) {
+            case "Manager":
+                //if we're selecting 'manager' then run the function that correlates with manager, //
+                //repeat with Engineer and intern //
+                return getManager();
+                break;
+            case "Engineer":
+                return getEngineer();
+                break;
+            case "Intern":
+                return getIntern();
+                break;
+            case "None Left":
+                render(teamMembers);
+                break
+        }
+    })
+
+function getManager() {
+    return inquirer.prompt([{
+        type: "input",
+        message: "Hello, what is your first name?",
+        name: "managerFirstName"
+    }, {
+        type: "input",
+        message: "What is your email address?",
+        name: "managerEmail"
+
+    }, {
+        type: "input",
+        message: "What is the employee ID associated with your name?",
+        name: "managerID"
+    }, {
+        type: "input",
+        message: "What is your suite number to the corresponding office?",
+        name: "managerSuite"
+    }   
+]).then(managerChoices => {
+    console.log(managerChoices);
+    const manager = new Manager(managerChoices.managerFirstName, managerChoices.managerEmail, managerChoices.managerID, managerChoices.managerSuite)
+    teamMembers.push(manager)
+    return generateMain();
+})
+}
+function getEngineer() {
+    return inquirer.prompt([{
+        type: "input",
+        message: "Hello, what is your first name?",
+        name: "engineerFirstName"
+    }, {
+        type: "input",
+        message: "What is your email address?",
+        name: "engineerEmail"
+
+    }, {
+        type: "input",
+        message: "What is the employee ID associated with your name?",
+        name: "engineerID"
+    }, {
+        type: "input",
+        message: "What is your Github username?",
+        name: "engineerGit"
+    }   
+]).then(engineerChoices => {
+    console.log(engineerChoices);
+    const engineer = new Engineer(engineerChoices.engineerFirstName, engineerChoices.engineerEmail, engineerChoices.engineerID, engineerChoices.engineerGit)
+    teamMembers.push(engineer)
+    return generateMain();
+})
+}
+function getIntern() {
+    return inquirer.prompt([{
+        type: "input",
+        message: "Hello, what is your first name?",
+        name: "internFirstName"
+    }, {
+        type: "input",
+        message: "What is your email address?",
+        name: "internEmail"
+
+    }, {
+        type: "input",
+        message: "What is the employee ID associated with your name?",
+        name: "internID"
+    }, {
+        type: "input",
+        message: "What is your Github username?",
+        name: "internGit"
+    }   
+]).then(internChoices => {
+    console.log(internChoices);
+    const intern = new Intern(internChoices.internFirstName, internChoices.internEmail, internChoices.internID, internChoices.internGit)
+    teamMembers.push(intern)
+    return generateMain();
+})
+}
+}
+generateTheTeam().then(() => {
+    let html = render(teamMembers);
+    fs.writeFile("./output/team.html", html, "utf8", ()=> {
+        console.log(`Completed.`)
+    });
+})
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
