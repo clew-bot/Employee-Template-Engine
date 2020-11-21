@@ -132,7 +132,7 @@ generateTheTeam().then(() => {
     // render is already a given function, we are passing in the teamMembers variable which holds the employee data // 
     let html = render(teamMembers);
     // node fs module to write the file into the team.html //
-    fs.writeFile("./output/team.html", html, "utf8", ()=> {
+    fs.writeFile("./lib/team.html", html, "utf8", ()=> {
         console.log(`Completed.`)
     });
 })
